@@ -1,4 +1,4 @@
-package com.mobbelldev.todocompose.data
+package com.mobbelldev.todocompose.data.dao
 
 import androidx.room.Delete
 import androidx.room.Insert
@@ -15,7 +15,7 @@ interface ToDoDao {
     @Query("SELECT * FROM todo_table WHERE id=:taskId")
     fun getSelectedTask(taskId: Int): Flow<ToDoTask>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
     suspend fun addTask(toDoTask: ToDoTask)
 
     @Update

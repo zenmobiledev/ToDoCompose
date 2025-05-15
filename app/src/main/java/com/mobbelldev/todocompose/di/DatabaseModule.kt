@@ -2,7 +2,7 @@ package com.mobbelldev.todocompose.di
 
 import android.content.Context
 import androidx.room.Room
-import com.mobbelldev.todocompose.data.ToDoDatabase
+import com.mobbelldev.todocompose.data.database.ToDoDatabase
 import com.mobbelldev.todocompose.util.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides

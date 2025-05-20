@@ -5,7 +5,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.mobbelldev.todocompose.ui.screens.ListScreen
-import com.mobbelldev.todocompose.util.Action
 import com.mobbelldev.todocompose.util.Constants.LIST_ARGUMENT_KEY
 import com.mobbelldev.todocompose.util.Constants.LIST_SCREEN
 

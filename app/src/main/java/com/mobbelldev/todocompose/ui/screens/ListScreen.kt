@@ -15,7 +15,7 @@ import com.mobbelldev.todocompose.R
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
-    navigateToTaskScreen: (Int) -> Unit,
+    navigateToTaskScreen: (taskId: Int) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -32,7 +32,7 @@ fun ListScreen(
 
 @Composable
 fun ListFAB(
-    onFabClicked: (Int) -> Unit,
+    onFabClicked: (taskId: Int) -> Unit,
 ) {
     FloatingActionButton(
         onClick = {

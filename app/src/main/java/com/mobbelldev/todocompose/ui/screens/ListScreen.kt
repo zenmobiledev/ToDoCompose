@@ -8,20 +8,32 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.mobbelldev.todocompose.R
+import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
+import com.mobbelldev.todocompose.util.SearchBarAppState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
+    sharedViewModel: SharedViewModel,
 ) {
+    val searchBarAppState: SearchBarAppState by sharedViewModel.searchBarAppState
+    val searchTextState: String by sharedViewModel.searchTextState
+
     Scaffold(
         topBar = {
-            ListAppBar()
+            ListAppBar(
+                sharedViewModel = sharedViewModel,
+                searchBarAppState = searchBarAppState,
+                searchTextState = searchTextState
+            )
         },
-        content = {},
+        content = {
+
+        },
         floatingActionButton = {
             ListFAB(
                 onFabClicked = navigateToTaskScreen
@@ -45,12 +57,4 @@ fun ListFAB(
             tint = MaterialTheme.colorScheme.primary
         )
     }
-}
-
-@Preview
-@Composable
-private fun ListScreenPreview() {
-    ListScreen(
-        navigateToTaskScreen = {}
-    )
 }

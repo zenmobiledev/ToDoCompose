@@ -3,6 +3,7 @@ package com.mobbelldev.todocompose.ui.screens
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -36,28 +37,46 @@ import com.mobbelldev.todocompose.data.model.Priority
 import com.mobbelldev.todocompose.ui.theme.LARGE_PADDING
 import com.mobbelldev.todocompose.ui.theme.TOP_APP_BAR_HEIGHT
 import com.mobbelldev.todocompose.ui.theme.TOP_BAR_ELEVATION
+import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
+import com.mobbelldev.todocompose.util.SearchBarAppState
+import com.mobbelldev.todocompose.util.TrailingIconState
 
 @Composable
-fun ListAppBar() {
-//    DefaultListAppBar(
-//        onSearchClicked = {
-//
-//        },
-//        onSortClicked = {
-//
-//        },
-//
-//        onDeleteAction = {
-//
-//        },
-//    )
+fun ListAppBar(
+    sharedViewModel: SharedViewModel,
+    searchBarAppState: SearchBarAppState,
+    searchTextState: String,
+) {
 
-    SearchAppBar(
-        text = "",
-        onTextChange = {},
-        onClosedClicked = {},
-        onSearchClicked = {}
-    )
+    when (searchBarAppState) {
+        SearchBarAppState.CLOSED -> {
+            DefaultListAppBar(
+                onSearchClicked = {
+                    sharedViewModel.searchBarAppState.value = SearchBarAppState.OPENED
+                },
+                onSortClicked = {
+
+                },
+                onDeleteAction = {
+
+                },
+            )
+        }
+
+        else -> {
+            SearchAppBar(
+                text = searchTextState,
+                onTextChange = { newText ->
+                    sharedViewModel.searchTextState.value = newText
+                },
+                onClosedClicked = {
+                    sharedViewModel.searchBarAppState.value = SearchBarAppState.CLOSED
+                    sharedViewModel.searchTextState.value = ""
+                },
+                onSearchClicked = {}
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,8 +125,7 @@ fun SearchAction(
 ) {
     IconButton(
         onClick = {
-            onSearchClicked
-            println("Search icon is clicked!")
+            onSearchClicked()
         }
     ) {
         Icon(
@@ -205,9 +223,16 @@ fun SearchAppBar(
     onClosedClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
 ) {
+    var trailingIconState: TrailingIconState by remember {
+        mutableStateOf(
+            value = TrailingIconState.READY_TO_DELETE,
+        )
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .height(TOP_APP_BAR_HEIGHT),
         shadowElevation = TOP_BAR_ELEVATION,
     ) {
@@ -240,7 +265,23 @@ fun SearchAppBar(
             },
             trailingIcon = {
                 IconButton(
-                    onClick = { onClosedClicked() }
+                    onClick = {
+                        when (trailingIconState) {
+                            TrailingIconState.READY_TO_DELETE -> {
+                                onTextChange("")
+                                trailingIconState = TrailingIconState.READY_TO_CLOSE
+                            }
+
+                            TrailingIconState.READY_TO_CLOSE -> {
+                                if (text.isNotEmpty()) {
+                                    onTextChange("")
+                                } else {
+                                    onClosedClicked()
+                                    trailingIconState = TrailingIconState.READY_TO_DELETE
+                                }
+                            }
+                        }
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,

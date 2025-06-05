@@ -1,4 +1,4 @@
-package com.mobbelldev.todocompose.ui.screens
+package com.mobbelldev.todocompose.ui.screens.list
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -88,7 +88,7 @@ fun DefaultListAppBar(
 ) {
     TopAppBar(
         title = {
-            Text(text = "Tasks")
+            Text(text = stringResource(R.string.list_screen_title))
         },
         actions = {
             ListAppBarActions(
@@ -246,7 +246,7 @@ fun SearchAppBar(
             placeholder = {
                 Text(
                     modifier = Modifier.alpha(0.5F),
-                    text = "Search"
+                    text = stringResource(R.string.search_placeholder)
                 )
             },
             singleLine = true,
@@ -259,7 +259,7 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Search,
-                        contentDescription = "Search Icon",
+                        contentDescription = stringResource(R.string.search_icon),
                     )
                 }
             },
@@ -285,7 +285,7 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = "Close Icon",
+                        contentDescription = stringResource(R.string.close_icon),
                     )
                 }
             },

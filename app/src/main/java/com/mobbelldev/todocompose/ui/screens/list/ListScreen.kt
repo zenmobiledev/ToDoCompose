@@ -1,4 +1,4 @@
-package com.mobbelldev.todocompose.ui.screens
+package com.mobbelldev.todocompose.ui.screens.list
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
@@ -32,7 +32,7 @@ fun ListScreen(
             )
         },
         content = {
-
+            ListContent()
         },
         floatingActionButton = {
             ListFAB(

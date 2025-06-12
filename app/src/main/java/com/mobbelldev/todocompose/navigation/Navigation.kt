@@ -15,19 +15,19 @@ fun SetupNavigation(
 
     NavHost(
         navController = navHostController,
-        startDestination = Screens.List()
+        startDestination = Screen.List()
     ) {
         listComposable(
             navigateToTaskScreen = { taskId ->
-                navHostController.navigate(Screens.Task(id = taskId))
+                navHostController.navigate(Screen.Task(id = taskId))
             },
             sharedViewModel = sharedViewModel,
         )
 
         taskComposable(
             navigateToTaskScreen = { action ->
-                navHostController.navigate(Screens.List(action = action)) {
-                    popUpTo(Screens.Task) { inclusive = true }
+                navHostController.navigate(Screen.List(action = action)) {
+                    popUpTo(Screen.Task) { inclusive = true }
                 }
             },
             sharedViewModel = sharedViewModel,

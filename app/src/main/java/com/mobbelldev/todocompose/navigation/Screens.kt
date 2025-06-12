@@ -1,19 +1,27 @@
 package com.mobbelldev.todocompose.navigation
 
-import androidx.navigation.NavHostController
 import com.mobbelldev.todocompose.util.Action
-import com.mobbelldev.todocompose.util.Constants.LIST_SCREEN
+import kotlinx.serialization.Serializable
 
-class Screens(navHostController: NavHostController) {
-    val list: (Action) -> Unit = { action ->
-        navHostController.navigate("list/${action.name}") {
-            popUpTo(LIST_SCREEN) {
-                inclusive = true
-            }
-        }
-    }
+//class Screens(navHostController: NavHostController) {
+//    val list: (Action) -> Unit = { action ->
+//        navHostController.navigate("list/${action.name}") {
+//            popUpTo(LIST_SCREEN) {
+//                inclusive = true
+//            }
+//        }
+//    }
+//
+//    val task: (Int) -> Unit = { taskId ->
+//        navHostController.navigate("task/$taskId")
+//    }
+//}
 
-    val task: (Int) -> Unit = { taskId ->
-        navHostController.navigate("task/$taskId")
-    }
+@Serializable
+sealed class Screens {
+    @Serializable
+    data class List(val action: Action = Action.NO_ACTION) : Screens()
+
+    @Serializable
+    data class Task(val id: Int) : Screens()
 }

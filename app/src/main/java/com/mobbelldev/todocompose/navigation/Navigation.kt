@@ -1,33 +1,35 @@
 package com.mobbelldev.todocompose.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mobbelldev.todocompose.navigation.destinations.listComposable
 import com.mobbelldev.todocompose.navigation.destinations.taskComposable
 import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
-import com.mobbelldev.todocompose.util.Constants.LIST_SCREEN
 
 @Composable
-fun SetupNavigation(navHostController: NavHostController, sharedViewModel: SharedViewModel) {
-    val screen = remember(key1 = navHostController) {
-        Screens(
-            navHostController = navHostController
-        )
-    }
+fun SetupNavigation(
+    navHostController: NavHostController,
+    sharedViewModel: SharedViewModel,
+) {
 
     NavHost(
         navController = navHostController,
-        startDestination = LIST_SCREEN
+        startDestination = Screens.List()
     ) {
         listComposable(
-            navigateToTaskScreen = screen.task,
+            navigateToTaskScreen = { taskId ->
+                navHostController.navigate(Screens.Task(id = taskId))
+            },
             sharedViewModel = sharedViewModel,
         )
 
         taskComposable(
-            navigateToTaskScreen = screen.list,
+            navigateToTaskScreen = { action ->
+                navHostController.navigate(Screens.List(action = action)) {
+                    popUpTo(Screens.Task) { inclusive = true }
+                }
+            },
             sharedViewModel = sharedViewModel,
         )
     }

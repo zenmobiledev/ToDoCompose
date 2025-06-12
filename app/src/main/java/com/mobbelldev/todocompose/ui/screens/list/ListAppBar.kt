@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -96,7 +97,8 @@ fun DefaultListAppBar(
                 onSortClicked = onSortClicked,
                 onDeleteAction = onDeleteAction,
             )
-        }
+        },
+        colors = TopAppBarDefaults.topAppBarColors()
     )
 }
 
@@ -231,8 +233,8 @@ fun SearchAppBar(
 
     Surface(
         modifier = Modifier
-            .fillMaxWidth()
             .statusBarsPadding()
+            .fillMaxWidth()
             .height(TOP_APP_BAR_HEIGHT),
         shadowElevation = TOP_BAR_ELEVATION,
     ) {
@@ -246,13 +248,14 @@ fun SearchAppBar(
             placeholder = {
                 Text(
                     modifier = Modifier.alpha(0.5F),
-                    text = stringResource(R.string.search_placeholder)
+                    text = stringResource(R.string.search_placeholder),
+                    color = Color.White
                 )
             },
             singleLine = true,
             leadingIcon = {
                 IconButton(
-                    modifier = Modifier.alpha(alpha = 0.5F),
+                    modifier = Modifier.alpha(alpha = 0.38F),
                     onClick = {
 
                     }
@@ -301,6 +304,10 @@ fun SearchAppBar(
                 focusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                errorContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent
             )
         )
     }

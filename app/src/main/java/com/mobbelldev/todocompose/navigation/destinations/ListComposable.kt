@@ -10,7 +10,7 @@ fun NavGraphBuilder.listComposable(
     navigateToTaskScreen: (taskId: Int) -> Unit,
     sharedViewModel: SharedViewModel,
 ) {
-    composable<Screen.List> {
+    composable<Screen.List> { navBackStackEntry ->
         ListScreen(
             navigateToTaskScreen = navigateToTaskScreen,
             sharedViewModel = sharedViewModel,

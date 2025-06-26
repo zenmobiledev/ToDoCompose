@@ -1,30 +1,29 @@
 package com.mobbelldev.todocompose.navigation.destinations
 
-import android.util.Log
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.mobbelldev.todocompose.navigation.Screen
+import com.mobbelldev.todocompose.ui.screens.task.TaskScreen
 import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
 import com.mobbelldev.todocompose.util.Action
 
 fun NavGraphBuilder.taskComposable(
-    navigateToTaskScreen: (Action) -> Unit,
     sharedViewModel: SharedViewModel,
+    navigateToListScreen: (Action) -> Unit,
 ) {
-    composable<Screen.Task>(
-        enterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { fullWidth -> -fullWidth },
-                animationSpec = tween(
-                    durationMillis = 3000
-                )
-            )
-        }
-    ) { navBackStackEntry ->
+    composable<Screen.Task> { navBackStackEntry ->
         val taskId = navBackStackEntry.toRoute<Screen.Task>().id
-        Log.d("TaskComposable", "get task id: $taskId")
+        sharedViewModel.getSelectedTask(
+            taskId = taskId
+        )
+
+        val selectedTask by sharedViewModel.selectedTask.collectAsState()
+        TaskScreen(
+            navigateToListScreen = navigateToListScreen,
+            selectedTask = selectedTask
+        )
     }
 }

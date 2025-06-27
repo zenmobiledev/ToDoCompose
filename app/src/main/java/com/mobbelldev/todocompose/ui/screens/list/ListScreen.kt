@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mobbelldev.todocompose.R
 import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
+import com.mobbelldev.todocompose.util.Action
 import com.mobbelldev.todocompose.util.SearchBarAppState
 
 @Composable
@@ -26,10 +27,16 @@ fun ListScreen(
         sharedViewModel.getAllTasks()
     }
 
+    val action: Action by sharedViewModel.action
+
     val allTasks by sharedViewModel.allTasks.collectAsState()
 
     val searchBarAppState: SearchBarAppState = sharedViewModel.searchBarAppState
     val searchTextState: String = sharedViewModel.searchTextState
+
+    sharedViewModel.handleDatabaseAction(
+        action = action
+    )
 
     Scaffold(
         topBar = {

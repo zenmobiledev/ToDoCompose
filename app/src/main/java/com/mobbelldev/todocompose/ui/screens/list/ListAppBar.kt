@@ -14,6 +14,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,6 +31,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.mobbelldev.todocompose.R
@@ -40,7 +42,6 @@ import com.mobbelldev.todocompose.ui.theme.TOP_APP_BAR_HEIGHT
 import com.mobbelldev.todocompose.ui.theme.TOP_BAR_ELEVATION
 import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
 import com.mobbelldev.todocompose.util.SearchBarAppState
-import com.mobbelldev.todocompose.util.TrailingIconState
 
 @Composable
 fun ListAppBar(
@@ -53,7 +54,9 @@ fun ListAppBar(
         SearchBarAppState.CLOSED -> {
             DefaultListAppBar(
                 onSearchClicked = {
-                    sharedViewModel.searchBarAppState.value = SearchBarAppState.OPENED
+                    sharedViewModel.updateAppBarState(
+                        newState = SearchBarAppState.OPENED
+                    )
                 },
                 onSortClicked = {
 
@@ -68,11 +71,17 @@ fun ListAppBar(
             SearchAppBar(
                 text = searchTextState,
                 onTextChange = { newText ->
-                    sharedViewModel.searchTextState.value = newText
+                    sharedViewModel.updateSearchText(
+                        newText = newText
+                    )
                 },
                 onClosedClicked = {
-                    sharedViewModel.searchBarAppState.value = SearchBarAppState.CLOSED
-                    sharedViewModel.searchTextState.value = ""
+                    sharedViewModel.updateAppBarState(
+                        newState = SearchBarAppState.CLOSED
+                    )
+                    sharedViewModel.updateSearchText(
+                        newText = ""
+                    )
                 },
                 onSearchClicked = {}
             )
@@ -89,7 +98,10 @@ fun DefaultListAppBar(
 ) {
     TopAppBar(
         title = {
-            Text(text = stringResource(R.string.list_screen_title))
+            Text(
+                color = MaterialTheme.colorScheme.onPrimary,
+                text = stringResource(R.string.list_screen_title)
+            )
         },
         actions = {
             ListAppBarActions(
@@ -98,7 +110,9 @@ fun DefaultListAppBar(
                 onDeleteAction = onDeleteAction,
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors()
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        )
     )
 }
 
@@ -133,18 +147,24 @@ fun SearchAction(
         Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = stringResource(R.string.search_action),
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
 
 @Composable
-fun SortAction(onSortClicked: (Priority) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
+fun SortAction(
+    onSortClicked: (Priority) -> Unit,
+) {
+    var expanded: Boolean by remember { mutableStateOf(false) }
 
-    IconButton(onClick = { expanded = true }) {
+    IconButton(
+        onClick = { expanded = true }
+    ) {
         Icon(
             painter = painterResource(R.drawable.ic_filter_list_24),
             contentDescription = stringResource(R.string.sort_action),
+            tint = MaterialTheme.colorScheme.onPrimary
         )
 
         DropdownMenu(
@@ -153,33 +173,19 @@ fun SortAction(onSortClicked: (Priority) -> Unit) {
                 expanded = false
             },
         ) {
-            DropdownMenuItem(
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.LOW)
-                },
-                text = {
-                    PriorityItem(Priority.LOW)
-                },
-            )
-            DropdownMenuItem(
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.HIGH)
-                },
-                text = {
-                    PriorityItem(Priority.HIGH)
-                },
-            )
-            DropdownMenuItem(
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.NONE)
-                },
-                text = {
-                    PriorityItem(Priority.NONE)
-                },
-            )
+            Priority.entries.toTypedArray().slice(setOf(0, 2, 3)).forEach { priority ->
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        onSortClicked(priority)
+                    },
+                    text = {
+                        PriorityItem(
+                            priority = priority
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -188,12 +194,15 @@ fun SortAction(onSortClicked: (Priority) -> Unit) {
 fun DeleteAllAction(
     onDeleteAction: () -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded: Boolean by remember { mutableStateOf(false) }
 
-    IconButton(onClick = { expanded = true }) {
+    IconButton(
+        onClick = { expanded = true }
+    ) {
         Icon(
             painter = painterResource(R.drawable.ic_more_vert_24),
             contentDescription = stringResource(R.string.delete_all_action),
+            tint = MaterialTheme.colorScheme.onPrimary
         )
 
         DropdownMenu(
@@ -207,6 +216,7 @@ fun DeleteAllAction(
                     Text(
                         modifier = Modifier.padding(start = LARGE_PADDING),
                         text = stringResource(R.string.delete_all_action),
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 },
                 onClick = {
@@ -225,12 +235,6 @@ fun SearchAppBar(
     onClosedClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
 ) {
-    var trailingIconState: TrailingIconState by remember {
-        mutableStateOf(
-            value = TrailingIconState.READY_TO_DELETE,
-        )
-    }
-
     Surface(
         modifier = Modifier
             .statusBarsPadding()
@@ -247,18 +251,21 @@ fun SearchAppBar(
             },
             placeholder = {
                 Text(
-                    modifier = Modifier.alpha(0.5F),
+                    modifier = Modifier
+                        .alpha(0.5F),
                     text = stringResource(R.string.search_placeholder),
-                    color = Color.White
+                    color = Color.Black
                 )
             },
+            textStyle = TextStyle(
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+            ),
             singleLine = true,
             leadingIcon = {
                 IconButton(
-                    modifier = Modifier.alpha(alpha = 0.38F),
-                    onClick = {
-
-                    }
+                    modifier = Modifier
+                        .alpha(alpha = 0.38F),
+                    onClick = {}
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Search,
@@ -269,20 +276,10 @@ fun SearchAppBar(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        when (trailingIconState) {
-                            TrailingIconState.READY_TO_DELETE -> {
-                                onTextChange("")
-                                trailingIconState = TrailingIconState.READY_TO_CLOSE
-                            }
-
-                            TrailingIconState.READY_TO_CLOSE -> {
-                                if (text.isNotEmpty()) {
-                                    onTextChange("")
-                                } else {
-                                    onClosedClicked()
-                                    trailingIconState = TrailingIconState.READY_TO_DELETE
-                                }
-                            }
+                        if (text.isNotEmpty()) {
+                            onTextChange("")
+                        } else {
+                            onClosedClicked()
                         }
                     }
                 ) {

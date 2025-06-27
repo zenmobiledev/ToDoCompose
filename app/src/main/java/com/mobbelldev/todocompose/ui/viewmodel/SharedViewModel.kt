@@ -1,7 +1,9 @@
 package com.mobbelldev.todocompose.ui.viewmodel
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobbelldev.todocompose.data.model.Priority
@@ -26,10 +28,13 @@ class SharedViewModel @Inject constructor(
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
 
-    val searchBarAppState: MutableState<SearchBarAppState> = mutableStateOf(
+    var searchBarAppState: SearchBarAppState by mutableStateOf(
         value = SearchBarAppState.CLOSED
     )
-    val searchTextState: MutableState<String> = mutableStateOf(value = "")
+        private set
+
+    var searchTextState: String by mutableStateOf(value = "")
+        private set
 
     private val _allTasks =
         MutableStateFlow<RequestState<List<ToDoTask>>>(value = RequestState.Idle)
@@ -77,5 +82,13 @@ class SharedViewModel @Inject constructor(
         if (newTitle.length < MAX_TITLE_LENGTH) {
             title.value = newTitle
         }
+    }
+
+    fun updateAppBarState(newState: SearchBarAppState) {
+        searchBarAppState = newState
+    }
+
+    fun updateSearchText(newText: String) {
+        searchTextState = newText
     }
 }

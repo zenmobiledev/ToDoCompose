@@ -23,6 +23,7 @@ import com.mobbelldev.todocompose.data.model.Priority
 import com.mobbelldev.todocompose.data.model.ToDoTask
 import com.mobbelldev.todocompose.ui.theme.LARGE_PADDING
 import com.mobbelldev.todocompose.ui.theme.PRIORITY_INDICATOR_SIZE
+import com.mobbelldev.todocompose.ui.theme.TASK_ITEM_ELEVATION
 import com.mobbelldev.todocompose.util.RequestState
 
 @Composable
@@ -44,10 +45,13 @@ fun ListContent(
 
 @Composable
 fun DisplayTasks(
+    modifier: Modifier = Modifier,
     tasks: List<ToDoTask>,
     navigateToTaskScreen: (taskId: Int) -> Unit,
 ) {
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier
+    ) {
         items(
             items = tasks,
             key = { task ->
@@ -70,6 +74,7 @@ fun TaskItem(
         modifier = Modifier
             .fillMaxWidth(),
         shape = RectangleShape,
+        shadowElevation = TASK_ITEM_ELEVATION,
         onClick = {
             navigateToTaskScreen(toDoTask.id)
         }
@@ -83,7 +88,7 @@ fun TaskItem(
                 Text(
                     modifier = Modifier.weight(8F),
                     text = toDoTask.title,
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
                 )

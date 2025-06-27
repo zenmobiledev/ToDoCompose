@@ -6,7 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,8 +27,9 @@ fun ListScreen(
     }
 
     val allTasks by sharedViewModel.allTasks.collectAsState()
-    val searchBarAppState: SearchBarAppState by sharedViewModel.searchBarAppState
-    val searchTextState: String by sharedViewModel.searchTextState
+
+    val searchBarAppState: SearchBarAppState = sharedViewModel.searchBarAppState
+    val searchTextState: String = sharedViewModel.searchTextState
 
     Scaffold(
         topBar = {
@@ -39,13 +39,20 @@ fun ListScreen(
                 searchTextState = searchTextState
             )
         },
-        content = {
-            Column(modifier = Modifier.padding(it)) {
+        content = { padding ->
+
+            Column(
+                modifier = Modifier.padding(
+                    top = padding.calculateTopPadding(),
+                    bottom = padding.calculateBottomPadding()
+                )
+            ) {
                 ListContent(
                     tasks = allTasks,
                     navigateToTaskScreen = navigateToTaskScreen
                 )
             }
+
         },
         floatingActionButton = {
             ListFAB(
@@ -67,7 +74,6 @@ fun ListFAB(
         Icon(
             imageVector = Icons.Filled.Add,
             contentDescription = stringResource(R.string.add_button),
-            tint = MaterialTheme.colorScheme.primary
         )
     }
 }

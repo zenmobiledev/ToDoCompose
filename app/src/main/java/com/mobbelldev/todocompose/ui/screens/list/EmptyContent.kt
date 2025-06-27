@@ -30,9 +30,15 @@ fun EmptyContent() {
         Icon(
             modifier = Modifier.size(120.dp),
             painter = painterResource(R.drawable.ic_sad_face_24),
-            contentDescription = stringResource(R.string.sad_face_icon)
+            contentDescription = stringResource(R.string.sad_face_icon),
+            tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.5F)
         )
-        Text(text = stringResource(R.string.empty_content), fontWeight = FontWeight.Bold)
+        Text(
+            text = stringResource(R.string.empty_content),
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5F),
+            fontWeight = FontWeight.Bold,
+            fontSize = MaterialTheme.typography.titleSmall.fontSize
+        )
     }
 }
 

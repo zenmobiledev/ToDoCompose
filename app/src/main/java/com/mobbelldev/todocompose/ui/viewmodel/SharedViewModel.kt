@@ -91,4 +91,6 @@ class SharedViewModel @Inject constructor(
     fun updateSearchText(newText: String) {
         searchTextState = newText
     }
+
+    fun validateFields(): Boolean = title.value.isNotEmpty() && description.value.isNotEmpty()
 }

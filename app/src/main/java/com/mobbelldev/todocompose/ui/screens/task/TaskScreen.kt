@@ -1,18 +1,20 @@
 package com.mobbelldev.todocompose.ui.screens.task
 
-import android.annotation.SuppressLint
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.mobbelldev.todocompose.data.model.Priority
 import com.mobbelldev.todocompose.data.model.ToDoTask
 import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
 import com.mobbelldev.todocompose.util.Action
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
 @Composable
 fun TaskScreen(
     selectedTask: ToDoTask?,
@@ -23,11 +25,25 @@ fun TaskScreen(
     val description: String by sharedViewModel.description
     val priority: Priority by sharedViewModel.priority
 
+    val context: Context = LocalContext.current
+
     Scaffold(
         topBar = {
             TaskAppBar(
                 selectedTask = selectedTask,
-                navigateToListScreen = navigateToListScreen
+                navigateToListScreen = { action ->
+                    if (action == Action.NO_ACTION) {
+                        navigateToListScreen(action)
+                    } else {
+                        if (sharedViewModel.validateFields()) {
+                            navigateToListScreen(action)
+                        } else {
+                            displayToast(
+                                context = context
+                            )
+                        }
+                    }
+                }
             )
         },
         content = {
@@ -49,4 +65,8 @@ fun TaskScreen(
             }
         }
     )
+}
+
+fun displayToast(context: Context) {
+    Toast.makeText(context, "Fields Empty.", Toast.LENGTH_SHORT).show()
 }

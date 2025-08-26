@@ -72,29 +72,24 @@ fun ListScreen(
                 searchTextState = searchTextState
             )
         },
-        content = { padding ->
-            Column(
-                modifier = Modifier.padding(
-                    top = padding.calculateTopPadding(),
-                    bottom = padding.calculateBottomPadding()
-                )
-            ) {
-                ListContent(
-                    allTasks = allTasks,
-                    searchedTasks = searchTasks,
-                    searchBarAppState = searchBarAppState,
-                    navigateToTaskScreen = navigateToTaskScreen,
-
-                    )
-            }
-
-        },
         floatingActionButton = {
             ListFAB(
                 onFabClicked = navigateToTaskScreen
             )
         },
-    )
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+        ) {
+            ListContent(
+                allTasks = allTasks,
+                searchedTasks = searchTasks,
+                searchBarAppState = searchBarAppState,
+                navigateToTaskScreen = navigateToTaskScreen
+            )
+        }
+    }
 }
 
 @Composable

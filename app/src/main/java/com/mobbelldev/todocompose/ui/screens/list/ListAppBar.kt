@@ -95,7 +95,7 @@ fun ListAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultListAppBar(
+private fun DefaultListAppBar(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
     onDeleteAction: () -> Unit,
@@ -121,7 +121,7 @@ fun DefaultListAppBar(
 }
 
 @Composable
-fun ListAppBarActions(
+private fun ListAppBarActions(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
     onDeleteAction: () -> Unit,
@@ -140,7 +140,7 @@ fun ListAppBarActions(
 }
 
 @Composable
-fun SearchAction(
+private fun SearchAction(
     onSearchClicked: () -> Unit,
 ) {
     IconButton(
@@ -157,7 +157,7 @@ fun SearchAction(
 }
 
 @Composable
-fun SortAction(
+private fun SortAction(
     onSortClicked: (Priority) -> Unit,
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
@@ -195,7 +195,7 @@ fun SortAction(
 }
 
 @Composable
-fun DeleteAllAction(
+private fun DeleteAllAction(
     onDeleteAction: () -> Unit,
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
@@ -233,7 +233,7 @@ fun DeleteAllAction(
 }
 
 @Composable
-fun SearchAppBar(
+private fun SearchAppBar(
     text: String,
     onTextChange: (String) -> Unit,
     onClosedClicked: () -> Unit,

@@ -1,7 +1,6 @@
 package com.mobbelldev.todocompose.ui.screens.list
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
@@ -38,7 +37,6 @@ import com.mobbelldev.todocompose.R
 import com.mobbelldev.todocompose.components.PriorityItem
 import com.mobbelldev.todocompose.data.model.Priority
 import com.mobbelldev.todocompose.ui.theme.LARGE_PADDING
-import com.mobbelldev.todocompose.ui.theme.TOP_APP_BAR_HEIGHT
 import com.mobbelldev.todocompose.ui.theme.TOP_BAR_ELEVATION
 import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
 import com.mobbelldev.todocompose.util.SearchBarAppState
@@ -241,9 +239,7 @@ private fun SearchAppBar(
 ) {
     Surface(
         modifier = Modifier
-            .statusBarsPadding()
-            .fillMaxWidth()
-            .height(TOP_APP_BAR_HEIGHT),
+            .statusBarsPadding(),
         shadowElevation = TOP_BAR_ELEVATION,
     ) {
         TextField(

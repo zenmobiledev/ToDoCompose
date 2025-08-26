@@ -32,7 +32,7 @@ fun ListScreen(
     sharedViewModel: SharedViewModel,
 ) {
     LaunchedEffect(key1 = action) {
-        sharedViewModel.getAllTasks()
+        sharedViewModel.handleDatabaseAction(action)
     }
 
     val allTasks by sharedViewModel.allTasks.collectAsState()
@@ -43,9 +43,6 @@ fun ListScreen(
 
     val snackBarHostState = remember { SnackbarHostState() }
 
-    sharedViewModel.handleDatabaseAction(
-        action = action
-    )
     DisplaySnackBar(
         snackBarHostState = snackBarHostState,
         onComplete = {

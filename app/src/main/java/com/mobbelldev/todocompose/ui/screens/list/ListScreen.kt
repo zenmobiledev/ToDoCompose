@@ -16,12 +16,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mobbelldev.todocompose.R
 import com.mobbelldev.todocompose.ui.viewmodel.SharedViewModel
 import com.mobbelldev.todocompose.util.Action
 import com.mobbelldev.todocompose.util.SearchBarAppState
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListScreen(
@@ -29,11 +31,6 @@ fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
     sharedViewModel: SharedViewModel,
 ) {
-//    LaunchedEffect(key1 = true) {
-//        sharedViewModel.handleDatabaseAction(
-//            action = action
-//        )
-//    }
     LaunchedEffect(key1 = action) {
         sharedViewModel.getAllTasks()
     }
@@ -127,17 +124,20 @@ fun DisplaySnackBar(
     taskTitle: String,
     action: Action,
 ) {
+    val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = action) {
         if (action != Action.NO_ACTION) {
-            val snackBarResult: SnackbarResult = snackBarHostState.showSnackbar(
-                message = setMessage(action = action, taskTitle = taskTitle),
-                actionLabel = setActionLabel(action = action),
-                duration = SnackbarDuration.Short
-            )
-            if (snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
-                onUndoClicked(Action.UNDO)
-            } else if (snackBarResult == SnackbarResult.Dismissed || action != Action.DELETE) {
-                onComplete(Action.NO_ACTION)
+            scope.launch {
+                val snackBarResult: SnackbarResult = snackBarHostState.showSnackbar(
+                    message = setMessage(action = action, taskTitle = taskTitle),
+                    actionLabel = setActionLabel(action = action),
+                    duration = SnackbarDuration.Short
+                )
+                if (snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
+                    onUndoClicked(Action.UNDO)
+                } else if (snackBarResult == SnackbarResult.Dismissed || action != Action.DELETE) {
+                    onComplete(Action.NO_ACTION)
+                }
             }
         }
     }

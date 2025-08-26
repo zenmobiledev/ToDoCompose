@@ -1,5 +1,6 @@
 package com.mobbelldev.todocompose.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -144,6 +145,7 @@ class SharedViewModel @Inject constructor(
     }
 
     fun handleDatabaseAction(action: Action) {
+        Log.d("handleDatabaseAction", "Triggered")
         when (action) {
             Action.ADD -> {
                 addTask()
@@ -151,7 +153,6 @@ class SharedViewModel @Inject constructor(
                     newAction = Action.NO_ACTION
                 )
             }
-
             Action.UPDATE -> updateTask()
             Action.DELETE -> deleteTask()
             Action.DELETE_ALL -> {}
@@ -162,7 +163,9 @@ class SharedViewModel @Inject constructor(
                 )
             }
 
-            Action.NO_ACTION -> {}
+            else -> {
+
+            }
         }
     }
 

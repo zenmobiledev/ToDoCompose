@@ -83,7 +83,11 @@ fun ListAppBar(
                         newText = ""
                     )
                 },
-                onSearchClicked = {}
+                onSearchClicked = {
+                    sharedViewModel.searchDatabase(
+                        searchQuery = it
+                    )
+                }
             )
         }
     }

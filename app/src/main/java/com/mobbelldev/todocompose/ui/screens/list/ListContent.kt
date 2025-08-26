@@ -25,21 +25,44 @@ import com.mobbelldev.todocompose.ui.theme.LARGE_PADDING
 import com.mobbelldev.todocompose.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.mobbelldev.todocompose.ui.theme.TASK_ITEM_ELEVATION
 import com.mobbelldev.todocompose.util.RequestState
+import com.mobbelldev.todocompose.util.SearchBarAppState
 
 @Composable
 fun ListContent(
-    tasks: RequestState<List<ToDoTask>>,
+    allTasks: RequestState<List<ToDoTask>>,
+    searchedTasks: RequestState<List<ToDoTask>>,
+    searchBarAppState: SearchBarAppState,
     navigateToTaskScreen: (taskId: Int) -> Unit,
 ) {
-    if (tasks is RequestState.Success) {
-        if (tasks.data.isEmpty()) {
-            EmptyContent()
-        } else {
-            DisplayTasks(
-                tasks = tasks.data,
+    if (searchBarAppState == SearchBarAppState.TRIGGERED) {
+        if (searchedTasks is RequestState.Success) {
+            HandleListContent(
+                tasks = searchedTasks.data,
                 navigateToTaskScreen = navigateToTaskScreen
             )
         }
+    } else {
+        if (allTasks is RequestState.Success) {
+            HandleListContent(
+                tasks = allTasks.data,
+                navigateToTaskScreen = navigateToTaskScreen
+            )
+        }
+    }
+}
+
+@Composable
+fun HandleListContent(
+    tasks: List<ToDoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+) {
+    if (tasks.isEmpty()) {
+        EmptyContent()
+    } else {
+        DisplayTasks(
+            tasks = tasks,
+            navigateToTaskScreen = navigateToTaskScreen
+        )
     }
 }
 

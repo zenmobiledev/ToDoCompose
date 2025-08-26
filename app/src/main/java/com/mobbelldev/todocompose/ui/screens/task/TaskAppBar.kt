@@ -152,9 +152,7 @@ fun UpdateAction(
 @Composable
 private fun NewTaskAppBarPreview() {
     NewTaskAppBar(
-        navigateToListScreen = {
-
-        }
+        navigateToListScreen = {}
     )
 }
 
